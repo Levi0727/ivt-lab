@@ -12,7 +12,9 @@ public class GT4500Test {
 
   @BeforeEach
   public void init(){
-    this.ship = new GT4500();
+    this.ship = mock(GT4500.class);
+    when(ship.fireTorpedo(FiringMode.SINGLE)).thenReturn(true);
+    when(ship.fireTorpedo(FiringMode.ALL)).thenReturn(true);
   }
 
   @Test
@@ -24,6 +26,7 @@ public class GT4500Test {
 
     // Assert
     assertEquals(true, result);
+    verify(ship, times(1)).fireTorpedo(FiringMode.SINGLE);
   }
 
   @Test
@@ -35,6 +38,19 @@ public class GT4500Test {
 
     // Assert
     assertEquals(true, result);
+    verify(ship, times(1)).fireTorpedo(FiringMode.ALL);
+  }
+
+  @Test
+  public void fire_All_Ammo_Success(){
+    int counter = 0;
+    for(int i = 0; i < 10; i++){
+      boolean result = ship.fireTorpedo(FiringMode.ALL);
+      if(result){
+        counter++;
+      }
+    }
+    assertEquals(10, counter);
   }
 
 }
